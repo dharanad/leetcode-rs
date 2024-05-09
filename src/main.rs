@@ -176,6 +176,31 @@ impl Solution {
         res
     }
 
+    // Link: https://leetcode.com/problems/relative-ranks
+    pub fn find_relative_ranks(score: Vec<i32>) -> Vec<String> {
+        use std::collections::HashMap;
+        let mut relative_score = score.clone();
+        relative_score.sort_unstable_by_key(|x| -x);
+        let mut score_rank_map = HashMap::new();
+        for (idx, ele) in relative_score.iter().enumerate() {
+            score_rank_map.insert(*ele, idx); // store score and its rank
+        }
+        score
+            .iter()
+            .map(|x| score_rank_map.get(x).unwrap().to_owned())
+            .map(|r| Solution::stringfy_range(r))
+            .collect()
+    }
+
+    pub fn stringfy_range(rank: usize) -> String {
+        return match rank {
+            0 => format!("Gold Medal"),
+            1 => format!("Silver Medal"),
+            2 => format!("Bronze Medal"),
+            x => format!("{}", x + 1),
+        };
+    }
+
 }
 
 
