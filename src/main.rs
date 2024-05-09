@@ -1,48 +1,44 @@
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
-  pub val: i32,
-  pub left: Option<Rc<RefCell<TreeNode>>>,
-  pub right: Option<Rc<RefCell<TreeNode>>>,
+    pub val: i32,
+    pub left: Option<Rc<RefCell<TreeNode>>>,
+    pub right: Option<Rc<RefCell<TreeNode>>>,
 }
 
 impl TreeNode {
-  #[inline]
-  pub fn new(val: i32) -> Self {
-    TreeNode {
-      val,
-      left: None,
-      right: None
+    #[inline]
+    pub fn new(val: i32) -> Self {
+        TreeNode {
+            val,
+            left: None,
+            right: None,
+        }
     }
-  }
 }
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
-  pub val: i32,
-  pub next: Option<Box<ListNode>>
+    pub val: i32,
+    pub next: Option<Box<ListNode>>,
 }
 
 impl ListNode {
-  #[inline]
-  fn new(val: i32) -> Self {
-    ListNode {
-      next: None,
-      val
+    #[inline]
+    fn new(val: i32) -> Self {
+        ListNode { next: None, val }
     }
-  }
 }
 
 fn main() {
-    println!("{}", Solution::num_rescue_boats(vec![3,5,3,4], 5)); // 4
-    println!("{}", Solution::num_rescue_boats(vec![1,3,3,4], 5)); // 3
-    println!("{}", Solution::num_rescue_boats(vec![1,2], 3)); // 1
+    println!("{}", Solution::num_rescue_boats(vec![3, 5, 3, 4], 5)); // 4
+    println!("{}", Solution::num_rescue_boats(vec![1, 3, 3, 4], 5)); // 3
+    println!("{}", Solution::num_rescue_boats(vec![1, 2], 3)); // 1
 }
 
 struct Solution;
-
 
 impl Solution {
     // Link: https://leetcode.com/problems/reverse-prefix-of-word/
@@ -57,7 +53,7 @@ impl Solution {
     pub fn find_index(word: &str, ch: char) -> Option<usize> {
         for (idx, c) in word.chars().enumerate() {
             if c == ch {
-                return Some(idx)
+                return Some(idx);
             }
         }
         None
@@ -73,9 +69,9 @@ impl Solution {
 
     // Link: https://leetcode.com/problems/largest-positive-integer-that-exists-with-its-negative
     pub fn find_max_k(nums: Vec<i32>) -> i32 {
-        use std::collections::HashSet;
         use std::cmp::max;
-        
+        use std::collections::HashSet;
+
         let mut s = HashSet::new();
         let mut res = -1;
         for n in nums {
@@ -90,27 +86,29 @@ impl Solution {
     // Link: https://leetcode.com/problems/compare-version-numbers
     pub fn compare_version(version1: String, version2: String) -> i32 {
         use std::cmp;
-        let mut v1_chunks = version1.split(".").map(|x| x.parse::<u32>().unwrap()).collect::<Vec<u32>>();
-        let mut v2_chunks = version2.split(".").map(|x| x.parse::<u32>().unwrap()).collect::<Vec<u32>>();
+        let mut v1_chunks = version1
+            .split(".")
+            .map(|x| x.parse::<u32>().unwrap())
+            .collect::<Vec<u32>>();
+        let mut v2_chunks = version2
+            .split(".")
+            .map(|x| x.parse::<u32>().unwrap())
+            .collect::<Vec<u32>>();
 
         drop(version1);
         drop(version2);
 
         let diff = v1_chunks.len().abs_diff(v2_chunks.len());
         if v1_chunks.len() < v2_chunks.len() {
-            v1_chunks.extend(vec![0; diff]);        
+            v1_chunks.extend(vec![0; diff]);
         } else {
             v2_chunks.extend(vec![0; diff]);
         }
-        
+
         for (a, b) in v1_chunks.iter().zip(v2_chunks.iter()) {
             match a.cmp(b) {
-                cmp::Ordering::Less => {
-                    return -1
-                },
-                cmp::Ordering::Greater => {
-                    return 1
-                }
+                cmp::Ordering::Less => return -1,
+                cmp::Ordering::Greater => return 1,
                 cmp::Ordering::Equal => {
                     // Pass
                 }
@@ -142,7 +140,8 @@ impl Solution {
         let mut hi = people.len() - 1;
         while lo < hi {
             let sum = people[lo] + people[hi];
-            if sum <= limit { // Pair People
+            if sum <= limit {
+                // Pair People
                 lo += 1;
                 hi -= 1;
             } else {
@@ -150,7 +149,8 @@ impl Solution {
             }
             boat_count += 1;
         }
-        if lo == hi { // if there is person left, use a boat
+        if lo == hi {
+            // if there is person left, use a boat
             boat_count += 1;
         }
         boat_count <= max_boats
@@ -200,7 +200,4 @@ impl Solution {
             x => format!("{}", x + 1),
         };
     }
-
 }
-
-
