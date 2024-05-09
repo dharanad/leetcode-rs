@@ -156,6 +156,26 @@ impl Solution {
         boat_count <= max_boats
     }
 
+    // Link: https://leetcode.com/problems/maximize-happiness-of-selected-children
+    pub fn maximum_happiness_sum(happiness: Vec<i32>, mut k: i32) -> i64 {
+        use std::collections::binary_heap::BinaryHeap;
+        // We can also sort in desc order and stop when delta >= ele
+        use std::ops::Sub;
+        let mut delta = 0;
+        let mut res = 0;
+        let mut max_q: BinaryHeap<i32> = BinaryHeap::new();
+        max_q.extend(happiness.iter());
+        while let Some(ele) = max_q.pop() {
+            if k == 0 {
+                break;
+            }
+            res += ele.sub(delta).max(0) as i64;
+            delta += 1;
+            k -= 1;
+        }
+        res
+    }
+
 }
 
 
