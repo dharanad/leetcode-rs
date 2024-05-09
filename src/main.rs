@@ -1,9 +1,7 @@
 fn main() {
-    println!("{}", Solution::compare_version("1.01.2".to_string(), "1.01.02".to_string(),));
-    println!("{}", Solution::compare_version("1.1".to_string(), "1".to_string(),));
-    println!("{}", Solution::compare_version("2.1".to_string(), "1".to_string(),));
-    println!("{}", Solution::compare_version("0.1".to_string(), "1".to_string(),));
-    println!("{}", Solution::compare_version("1.0.0.0".to_string(), "1.0".to_string(),));
+    println!("{}", Solution::num_rescue_boats(vec![3,5,3,4], 5)); // 4
+    println!("{}", Solution::num_rescue_boats(vec![1,3,3,4], 5)); // 3
+    println!("{}", Solution::num_rescue_boats(vec![1,2], 3)); // 1
 }
 
 struct Solution;
@@ -83,6 +81,44 @@ impl Solution {
         }
         0
     }
+
+    // Link: https://leetcode.com/problems/boats-to-save-people/
+    pub fn num_rescue_boats(people: Vec<i32>, limit: i32) -> i32 {
+        let mut people = people;
+        people.sort(); // sorting the vector since can_rescue_all_with_boats expect vec to be sorted
+        let mut lo = 0;
+        let mut hi = people.len() as i32;
+        while lo < hi {
+            let mid = lo + (hi - lo) / 2;
+            if Solution::can_rescue_all_with_boats(&people, limit, mid) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        lo
+    }
+
+    pub fn can_rescue_all_with_boats(people: &[i32], limit: i32, max_boats: i32) -> bool {
+        let mut boat_count = 0;
+        let mut lo = 0 as usize;
+        let mut hi = people.len() - 1;
+        while lo < hi {
+            let sum = people[lo] + people[hi];
+            if sum <= limit { // Pair People
+                lo += 1;
+                hi -= 1;
+            } else {
+                hi -= 1;
+            }
+            boat_count += 1;
+        }
+        if lo == hi { // if there is person left, use a boat
+            boat_count += 1;
+        }
+        boat_count <= max_boats
+    }
+
 }
 
 
