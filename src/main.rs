@@ -33,9 +33,8 @@ impl ListNode {
 }
 
 fn main() {
-    println!("{}", Solution::num_rescue_boats(vec![3, 5, 3, 4], 5)); // 4
-    println!("{}", Solution::num_rescue_boats(vec![1, 3, 3, 4], 5)); // 3
-    println!("{}", Solution::num_rescue_boats(vec![1, 2], 3)); // 1
+    println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,2,3,5], 3));
+    println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,7], 1));
 }
 
 struct Solution;
@@ -199,5 +198,54 @@ impl Solution {
             2 => format!("Bronze Medal"),
             x => format!("{}", x + 1),
         };
+    }
+
+    // Link: https://leetcode.com/problems/k-th-smallest-prime-fraction
+    pub fn kth_smallest_prime_fraction(mut arr: Vec<i32>, k: i32) -> Vec<i32> {
+        use std::collections::BinaryHeap;
+        arr.sort();
+
+
+        #[derive(PartialEq, Eq)]
+        struct Element {
+            nume: i32,
+            denom: i32
+        }
+        impl Element {
+            fn new(nume: i32, denom: i32) -> Element {
+                Element { nume, denom }
+            }
+
+            fn value(&self) -> f32 {
+                self.nume as f32 / self.denom as f32
+            }
+        }
+        impl PartialOrd for Element {
+            fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+                Some(self.cmp(other))
+            }
+        }
+        impl Ord for Element {
+            fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+                self.value().total_cmp(&other.value())
+            }
+        }
+
+        impl Into<Vec<i32>> for Element {
+            fn into(self) -> Vec<i32> {
+                vec![self.nume, self.denom]
+            }
+        }
+        let mut max_heap = BinaryHeap::new();
+        let arr_len = arr.len();
+        for i in 0..arr_len {
+            for j in (i+1..=arr_len-1).rev() {
+                max_heap.push(Element::new(arr[i], arr[j]));
+                if max_heap.len() > k as usize {
+                    max_heap.pop();
+                }
+            }
+        }
+        max_heap.pop().unwrap().into()
     }
 }
