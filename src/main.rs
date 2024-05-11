@@ -1,4 +1,6 @@
 use std::cell::RefCell;
+use std::cmp::Reverse;
+use std::collections::BinaryHeap;
 use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -247,5 +249,30 @@ impl Solution {
             }
         }
         max_heap.pop().unwrap().into()
+    }
+}
+
+// Link: https://leetcode.com/problems/seat-reservation-manager/
+struct SeatManager {
+    min_q: BinaryHeap<Reverse<i32>>
+}
+impl SeatManager {
+
+    fn new(n: i32) -> Self {
+        let mut min_q = BinaryHeap::new();
+        for i in 1..=n {
+            min_q.push(Reverse(i))
+        }
+        SeatManager {
+            min_q,
+        }
+    }
+    
+    fn reserve(&mut self) -> i32 {
+        self.min_q.pop().unwrap().0
+    }
+    
+    fn unreserve(&mut self, seat_number: i32) {
+        self.min_q.push(Reverse(seat_number))
     }
 }
