@@ -250,6 +250,23 @@ impl Solution {
         }
         max_heap.pop().unwrap().into()
     }
+
+    // Link: https://leetcode.com/problems/largest-local-values-in-a-matrix/
+    pub fn largest_local(grid: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let mut res: Vec<Vec<i32>> = Vec::new();
+        let n = grid.len();
+        for i in 0..n-2 {
+            let mut row = Vec::new();
+            for j in 0..n-2 {
+                let local_max = grid[i][j].max(grid[i][j+1]).max(grid[i][j+2])
+                    .max(grid[i+1][j]).max(grid[i+1][j+1]).max(grid[i+1][j+2])
+                    .max(grid[i+2][j]).max(grid[i+2][j+1]).max(grid[i+2][j+2]);
+                row.push(local_max);
+            }
+            res.push(row);
+        }
+        res
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
