@@ -284,14 +284,14 @@ impl Solution {
     // Link: https://leetcode.com/problems/find-k-closest-elements/
     pub fn find_closest_elements(arr: Vec<i32>, k: i32, x: i32) -> Vec<i32> {
         use std::collections::BinaryHeap;
-        let mut min_q: BinaryHeap<(u32, i32)> = BinaryHeap::new();
+        let mut max_q: BinaryHeap<(u32, i32)> = BinaryHeap::new();
         for e in arr.iter() {
-            min_q.push((x.abs_diff(*e), *e));
-            if min_q.len() > k as usize {
-                min_q.pop();
+            max_q.push((x.abs_diff(*e), *e));
+            if max_q.len() > k as usize {
+                max_q.pop();
             }
         }
-        let mut aux =  min_q.into_vec().iter().map(|(_,b)| *b).collect::<Vec<i32>>();
+        let mut aux =  max_q.into_vec().iter().map(|(_,b)| *b).collect::<Vec<i32>>();
         aux.sort();
         aux
     }
