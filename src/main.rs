@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp::Reverse;
-use std::collections::BinaryHeap;
+use std::collections::{BinaryHeap, HashMap};
 use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -264,6 +264,46 @@ impl Solution {
                 row.push(local_max);
             }
             res.push(row);
+        }
+        res
+    }
+
+    // Link: https://leetcode.com/problems/permutation-difference-between-two-strings/
+    pub fn find_permutation_difference(s: String, t: String) -> i32 {
+        let mut char_index_map = HashMap::new();
+        for (idx, c) in s.chars().enumerate() {
+            char_index_map.insert(c, idx);
+        }
+        let mut res = 0;
+        for (idx, c) in t.chars().enumerate() {
+            res += idx.abs_diff(char_index_map.get(&c).unwrap().to_owned())
+        }
+        res as i32
+    }
+    
+    // Link: https://leetcode.com/problems/find-k-closest-elements/
+    pub fn find_closest_elements(arr: Vec<i32>, k: i32, x: i32) -> Vec<i32> {
+        use std::collections::BinaryHeap;
+        let mut min_q: BinaryHeap<(u32, i32)> = BinaryHeap::new();
+        for e in arr.iter() {
+            min_q.push((x.abs_diff(*e), *e));
+            if min_q.len() > k as usize {
+                min_q.pop();
+            }
+        }
+        let mut aux =  min_q.into_vec().iter().map(|(_,b)| *b).collect::<Vec<i32>>();
+        aux.sort();
+        aux
+    }
+
+    // Link: https://leetcode.com/problems/unique-binary-search-trees/
+    pub fn num_trees(n: i32) -> i32 {
+        if n <= 1 {
+            return 1;
+        }
+        let mut res = 0;
+        for i in 0..n {
+            res += Self::num_trees(i) * Self::num_trees(n - 1 - i);
         }
         res
     }
