@@ -307,6 +307,45 @@ impl Solution {
         }
         res
     }
+
+    pub fn matrix_score(mut grid: Vec<Vec<i32>>) -> i32 {
+        let n = grid.len();
+        let m = grid[0].len();
+        for i in 0..n {
+            // If first bit is zero
+            if grid[i][0] == 0 {
+                // Flip Row
+                for j in 0..m {
+                    grid[i][j] = 1 - grid[i][j];
+                }
+            }
+        }
+        for j in 0..m {
+            let mut zero_count = 0;
+            for i in 0..n {
+                if grid[i][j] == 0 {
+                    zero_count += 1;
+                }
+            }
+            // If there are more zero than ones
+            if zero_count > n - zero_count {
+                // Flip Column
+                for i in 0..n {
+                    grid[i][j] = 1 - grid[i][j];
+                }
+            }
+        }
+        let mut score = 0;
+        for i in 0..n {
+            let mut row_score = 0;
+            for j in 0..m {
+                row_score += grid[i][j] << (m - j - 1);
+            }
+            score += row_score;
+        }
+        
+        score  
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
