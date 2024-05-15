@@ -346,6 +346,18 @@ impl Solution {
         
         score  
     }
+
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        use std::collections::HashMap;
+        let mut ele_index_map: HashMap<i32, usize> = HashMap::new();
+        for (idx, ele) in nums.iter().enumerate() {
+            if let Some(other_idx) = ele_index_map.get(&(target - ele)) {
+                return vec![other_idx.to_owned() as i32, idx as i32]
+            }
+            ele_index_map.insert(*ele, idx);
+        }
+        vec![]
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
