@@ -358,6 +358,23 @@ impl Solution {
         }
         vec![]
     }
+
+    // Link: https://leetcode.com/problems/evaluate-boolean-binary-tree
+    pub fn evaluate_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        if let Some(node) = root {
+            let node = node.borrow();
+            if node.val == 0 {
+                return false;
+            }
+            if node.val == 1 {
+                return true
+            }
+            let left = Self::evaluate_tree(node.left.clone());
+            let right = Self::evaluate_tree(node.right.clone());
+            return (node.val == 2 && (left || right)) || (left && right);
+        }
+        false
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
