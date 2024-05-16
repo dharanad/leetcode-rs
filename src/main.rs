@@ -375,6 +375,30 @@ impl Solution {
         }
         false
     }
+
+    // Link: https://leetcode.com/problems/merge-two-binary-trees/
+    pub fn merge_trees(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        return match (root1, root2) {
+            (Some(one), Some(two)) => {
+                let one = one.borrow();
+                let two = two.borrow();
+                let sum = one.val + two.val;
+                let mut node = TreeNode::new(sum);
+                node.left = Self::merge_trees(one.left.clone(), two.left.clone());
+                node.right = Self::merge_trees(one.right.clone(), two.right.clone());
+                Some(Rc::new(RefCell::new(node)))
+            },
+            (Some(one), None) => {
+                Some(one)
+            },
+            (None, Some(two)) => {
+                Some(two)
+            },
+            (None, None) => {
+                None
+            }
+        }
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
