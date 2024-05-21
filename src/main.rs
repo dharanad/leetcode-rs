@@ -399,6 +399,37 @@ impl Solution {
             }
         }
     }
+
+    // Link: https://leetcode.com/problems/delete-leaves-with-a-given-value/
+    pub fn remove_leaf_nodes(root: Option<Rc<RefCell<TreeNode>>>, target: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        if let Some(node) = root.clone() {
+            let mut node = node.borrow_mut();
+            node.left = Self::remove_leaf_nodes(node.left.clone(), target);
+            node.right = Self::remove_leaf_nodes(node.right.clone(), target);
+            if node.left.is_none() && node.right.is_none() && node.val == target {
+                return None;
+            }
+        }
+        root
+    }
+
+    pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        // unique element -> need no sorting for finding dups
+        // arr size <= 10 -> can use bit operations
+        let arr_len = nums.len();
+        let total_subset_count = 1 << arr_len;
+        let mut res = Vec::with_capacity(total_subset_count as usize);
+        for b in 0..total_subset_count {
+            let mut a = Vec::new();
+            for i in 0..arr_len {
+                if (b & 1 << i) > 0 {
+                    a.push(nums[i]);
+                }
+            }
+            res.push(a)
+        }
+        res
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
