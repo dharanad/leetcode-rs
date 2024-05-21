@@ -430,6 +430,23 @@ impl Solution {
         }
         res
     }
+
+    // Link: https://leetcode.com/problems/sum-of-all-subset-xor-totals/
+    pub fn subset_xor_sum(nums: Vec<i32>) -> i32 {
+        let mut res = 0;
+        let arr_len = nums.len();
+        let total_subset = 1 << arr_len;
+        for b in 0..total_subset {
+            let mut local_res = 0;
+            for i in 0..arr_len {
+                if(b & 1 << i) > 0 {
+                    local_res = local_res ^ nums[i];
+                }
+            }
+            res += local_res;
+        }
+        res
+    }
 }
 
 // Link: https://leetcode.com/problems/seat-reservation-manager/
