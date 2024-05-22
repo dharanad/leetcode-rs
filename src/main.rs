@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap};
 use std::rc::Rc;
+use std::str;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -446,6 +447,72 @@ impl Solution {
             res += local_res;
         }
         res
+    }
+
+    // Link: https://leetcode.com/problems/path-sum/
+    pub fn has_path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> bool {
+        if let Some(node) = root {
+            let local_node = node.borrow();
+            if local_node.left.is_none() && local_node.right.is_none() {
+                return target_sum - local_node.val == 0;
+            }
+            return Self::has_path_sum(local_node.left.clone(), target_sum - local_node.val) || 
+                Self::has_path_sum(local_node.right.clone(), target_sum - local_node.val);
+        }
+        false
+    }
+
+    // Link: https://leetcode.com/problems/palindrome-partitioning/
+    pub fn partition(s: String) -> Vec<Vec<String>> {
+        let str_len = s.len();
+        let mut res = Vec::with_capacity(str_len * str_len);
+        let s: Vec<char> = s.chars().collect();
+        Self::generate_palindrom_ss(&s, 0, &mut vec![], &mut res);
+        res
+    }
+
+    fn generate_palindrom_ss(s: &[char], idx: usize, buf: &mut Vec<String>, res: &mut Vec<Vec<String>>) {
+        if idx == s.len() {
+            res.push(buf.to_vec());
+        } else {
+            let mut local_buffer: Vec<char> = Vec::new();
+            for i in idx..s.len() {
+                local_buffer.push(s[i]);
+                if Self::is_palindrom(&local_buffer) {
+                    buf.push(String::from_iter(&local_buffer));
+                    Self::generate_palindrom_ss(s, i + 1, buf, res);
+                    buf.remove(buf.len() - 1);
+                }
+            }
+        }
+    }
+
+    fn is_palindrom(s: &[char]) -> bool {
+        let len = s.len();
+        let mut lo = 0;
+        let mut hi = len - 1;
+        while lo < hi {
+            if s[lo] != s[hi] {
+                return false
+            }
+            lo += 1;
+            hi -= 1;
+        }
+        true
+    }
+}
+
+
+struct TrieNode {
+    val: char,
+    nodes: Vec<Option<Box<TrieNode>>>
+}
+
+impl TrieNode {
+    pub fn add(word: &str) {
+        for c in word.chars() {
+
+        }
     }
 }
 
