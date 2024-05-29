@@ -36,8 +36,9 @@ impl ListNode {
 }
 
 fn main() {
-    println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,2,3,5], 3));
-    println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,7], 1));
+    // println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,2,3,5], 3));
+    // println!("{:?}", Solution::kth_smallest_prime_fraction(vec![1,7], 1));
+    println!("{:?}", Solution::rob(vec![1,2,3,1]));
 }
 
 struct Solution;
@@ -500,6 +501,26 @@ impl Solution {
         }
         true
     }
+
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let arr_len = nums.len();
+        let mut dp = Vec::with_capacity(arr_len);
+        for idx in 0..arr_len {
+            let money_robbed_till_now = if idx >= 1 {
+                dp[idx-1]
+            } else {
+                0
+            };
+            let money_robbed_in_last_house = if idx >= 2 {
+                dp[idx-2]
+            } else {
+                0
+            };
+            dp.push((nums[idx] + money_robbed_in_last_house).max(money_robbed_till_now));
+        }
+        dp[arr_len - 1]
+    }
+    
 }
 
 
